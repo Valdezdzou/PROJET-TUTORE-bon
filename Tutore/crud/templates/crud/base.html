@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <link rel="stylesheet" href="gestion.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel ="stylesheet"  href="{% static 'css/base.css' %}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
+    <title>Gestion</title>
+    <script>
+        $(document).ready(function(){
+ // Activate tooltips
+ $('[data-toggle="tooltip"]').tooltip();
+ 
+ // Filter table rows based on searched term
+ $("#search").on("keyup", function() {
+     var term = $(this).val().toLowerCase();
+     $("table tbody tr").each(function(){
+         $row = $(this);
+         var name = $row.find("td:nth-child(3)").text().toLowerCase();
+         console.log(name);
+         if(name.search(term) < 0){                
+             $row.hide();
+         } else{
+             $row.show();
+         }
+     });
+ });
+});
+ </script>
+</head>
+<body>
+    
+     <section id="sidebar">
+        <div class="jason" >
+            <img src="{% static 'images/1.webp' %}">
+           <a href="" class="brand">
+              <span class="text">GESDOCS</span>
+           </a>
+        </div>
+           <ul class="side-menu top">
+               <li class="active">
+                    <a href="{% url 'Accueil' %}">
+                        <h4><i class='bx bx-home-circle bx-tada bx-flip-vertical' ></i></h4>
+                        <span class="text">Acceuil</span>
+                    </a>
+               </li>
+               <li class="active">
+                    <a href="{% url 'listefichiers' %}">
+                        <h4><i class='bx bx-search-alt bx-tada bx-flip-vertical' ></i></h4>
+                        <span class="text">Recherche Avancée</span>
+                    </a>
+               </li>
+               <li class="active">
+                    <a href="{% url 'mesfichiers' %}">
+                        <h4><i class='bx bx-file bx-tada bx-flip-vertical' ></i></h4>
+                        <span class="text">Mes fichiers</span>
+                    </a>
+               </li>
+               <li class="active">
+                <a href="{% url 'recherche' %}">
+                    <h4><i class='bx bx-file-find bx-tada' ></i></h4>
+                    <span class="text">Recherche Avancée</span>
+                </a>
+           </li>
+           </ul>
+
+
+           <ul class="side-menu ">
+            <li>
+                {% if user.is_authenticated %}
+                   <a href="{% url 'deconnecter' %}" class="logout">
+                       <i class="bx bxs-log-out-circle"></i>
+                       <span class="text"><b>DECONNEXION</b></span>
+                   </a>
+                {% else %}
+                   <a href="{% url 'connecter' %}" class="logout">
+                       <i class="bx bxs-log-out-circle"></i>
+                       <span class="text"><b>CONNEXION</b></span>
+                  </a>
+                {% endif %}
+            </li>
+        </ul>
+     </section>
+
+
+     <section id="content">
+          <nav>
+            <div class="col-md-3">
+                <label for="validationCustom04" class="form-label">Auteurs</label>
+                <select class="form-select bng" id="validationCustom04" required>
+                  <option selected disabled value="" class=""   > Liste des Auteurs </option>
+                  {% for s in fich %}
+                  <option >{{ s.Auteur }}</option>
+                  {% endfor %}
+                </select>
+            </div>
+              <form action="" method="POST">
+                <div class="form-input">
+                    <input type="text" id="search" class="form-control" placeholder="Saisissez le nom du fichier rechercher">
+                    <button type="submit" class="search-btn"><i class="bx bx-search"></i></button>
+                </div>
+              </form>
+              {% if user.is_authenticated %}
+                  <h4><b>Bonjour {{ user.username }}</b></h4>
+                  <h3><i class='bx bxs-user-circle' ></i></i></h3>
+              {% else %}
+                  <h5><b>Veillez vous inscrire</b></h5>
+                  <h2><i class='bx bxs-user-circle bx-burst' ></i></h2>
+              {% endif %}
+          </nav>
+
+{% block coontent_home %}
+{% endblock coontent_home %}
+</body>
+<script>
+    $(document).ready(function(){
+        // Activate tooltip
+        $('[data-toggle="tooltip"]').tooltip();
+        
+        // Select/Deselect checkboxes
+        var checkbox = $('table tbody input[type="checkbox"]');
+        $("#selectAll").click(function(){
+            if(this.checked){
+                checkbox.each(function(){
+                    this.checked = true;                        
+                });
+            } else{
+                checkbox.each(function(){
+                    this.checked = false;                        
+                });
+            } 
+        });
+        checkbox.click(function(){
+            if(!this.checked){
+                $("#selectAll").prop("checked", false);
+            }
+        });
+    });
+</script>
+</html>

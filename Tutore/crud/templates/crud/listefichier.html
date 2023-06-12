@@ -1,0 +1,92 @@
+{% extends 'crud/base.html' %}
+{% block coontent_home %}
+
+<div class="container" style="padding-top: 3%">
+    <h4 style=" text-align: center"><b>Recherche Avancée</b></h4>
+    <hr>
+    <form action="{% url 'rechercheAvancee' %}" method="POST" >
+      {% csrf_token %}
+          <div class="col-md-6">
+              <label for="">Titre</label>
+              <input type="text" name="Titre" class="form-control">
+          </div>
+          <div class="col-md-6">
+              <label for="">Auteur</label>
+              <input type="text" name="Auteur" class="form-control">
+          </div>
+          <div class="col-md-6">
+              <label for="">Nom fichier</label>
+              <input type="text" name="nom_du_fichier" class="form-control">
+          </div>
+          <div class="col-md-6">
+              <label for="">Dernier contributeur</label>
+              <input type="text" name="dernier_contributeur" class="form-control">
+          </div>
+          <div class="col-md-6">
+              <label for="">Sujet</label>
+              <input type="text" name="sujet" class="form-control">
+          </div>
+          <div class="col-md-6">
+              <label for="">Description</label>
+              <input type="text" name="description" class="form-control">
+          </div>
+          <div class="col-md-6" style="padding: 18px">
+              <button class="btn btn-primary" type="submit">Rechercher le fichier</button>
+          </div>
+    </form>
+
+</div>
+
+<div class="container">
+    <div class="table-wrapper">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h2>Liste <b>Fichiers</b></h2>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>
+                        <span class="custom-checkbox">
+                            <input type="checkbox" id="selectAll">
+                            <label for="selectAll"></label>
+                        </span>
+                    </th>
+                    <th>Titre</th>
+                    <th>Nom</th>
+                    <th>Auteur</th>
+                    <th>Sujet</th>
+                    <th>Date de creation</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in toutfich %}
+                <tr>
+                    <td>
+                            <label for="checkbox1"><h3><i class="fa-sharp fa-regular fa-folder-open fa-sm" style="color: #ffac38;"></i></h3></label>
+					</td>
+                    <td>{{ s.Titre }}</td>
+                    <td>{{ s.nom_du_fichier }}</td>
+                    <td>{{ s.Auteur }}</td>
+                    <td>{{ s.sujet }}</td>
+                    <td>{{ s.date_de_creation }}</td>
+                  {% if user.is_authenticated %}  
+                    <td>
+                        <a href="{{s.document.url}}" download="{{s.nom_du_fichier}}" class="btn-download">
+                            <i class="bx bxs-cloud-download"></i>
+                            <span class="text">Télécharger</span>
+                        </a>
+                    </td>
+                  {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+    </div>
+</div>
+{% endblock coontent_home %}
